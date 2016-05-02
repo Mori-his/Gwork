@@ -373,10 +373,95 @@ $(window).load(function(){
     }
       });
 	  
-	  
-	  
-	  
+	//注册校验
+	var regForm = $('#registerForm');
+	$('#commit').on('click',function(e){
+		e.preventDefault();
+		if(!isCheck($(regForm).find('input'))){
+			alert('请填写完注册信息在提交!!!');
+			return;
+		}
+	});
+	$(regForm).find('.pass').on('input propertychange',function(){
+		var passLen = $(this).val().length;
+		if(passLen <= 16 && passLen >= 6){
+			$(this).removeClass('bor-red');
+			$('#commit').removeAttr('disabled');
+		}else{
+			$(this).addClass('bor-red');
+			$('#commit').attr('disabled','disabled');
+		}
+	});
+
+	/*
+		onInput :  W3C  实时监听input变化
+		propertychange : IE   实时监听Input变化
+	 */
+	$(regForm).find('.confirm-pass').on('input propertychange',function(){
+		var pass = $(regForm).find('.pass'),
+			passLen = $(pass).val().length,
+			passVal = $(pass).val();
+		if(passVal == $(this).val()){
+			$(this).removeClass('bor-red');
+			$('#commit').removeAttr('disabled');
+		}else{
+			$(this).addClass('bor-red');
+			$('#commit').attr('disabled','disabled');
+		}
+	});
+
+	var emailFilter  = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	var telFilter = /^1(3[0-9]|5[0-35-9]|8[025-9])\\d{8}$/;
+	var userFilter = /^[a-zA-Z0-9_]{4,16}$/;
+	$(regForm).find('.email').on('input propertychange',function(){
+		if(emailFilter.test($(this).val())){
+			$(this).removeClass('bor-red');
+			$('#commit').removeAttr('disabled');
+		}else{
+			$(this).addClass('bor-red');
+			$('#commit').attr('disabled','disabled');
+		}
+	});
+	$(regForm).find('.tel').on('input propertychange',function(){
+		if(telFilter.test($(this).val())){
+			$(this).removeClass('bor-red');
+			$('#commit').removeAttr('disabled');
+		}else{
+			$(this).addClass('bor-red');
+			$('#commit').attr('disabled','disabled');
+		}
+	});
+
+	$(regForm).find('.username').on('input propertychange',function(){
+		if(userFilter.test($(this).val())){
+			$(this).removeClass('bor-red');
+			$('#commit').removeAttr('disabled');
+		}else{
+			$(this).addClass('bor-red');
+			$('#commit').attr('disabled','disabled');
+		}
+	});
+
 });
+
+function isCheck(inputList){
+	var flag = false;
+	if($(inputList).length > 1){
+		$(inputList).each(function(){
+			if($(this).val() == ''){
+				flag = false;
+				return false;
+			}else{
+				flag = true;
+			}
+		});
+		return flag;
+	}
+	var flag = false;
+	$(inputList).val() != '' ? flag = true : flag = false;
+	return flag;
+
+}
 
 <!-- Scroll top -->		  
 $(window).scroll(function () {
